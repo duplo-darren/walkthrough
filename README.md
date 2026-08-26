@@ -124,25 +124,23 @@ DevKit includes a skill called **`duplo-extension`** which guides you through bu
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill. This should skip the initial check and identify the existing soc2-posture extension. 
+1. At the Claude prompt, invoke the **`duplo-extension`** skill.
 2. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 3. When prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**.
 4. Press **Enter** to confirm — Claude is ready to proceed.
 
+Walk through each prompt manually for this first deployment — it's worth seeing exactly what Claude is doing at each stage as it detects DuploCloud running locally, identifies the extension, compiles it, and deploys it to your DuploCloud instance.
+
+Watch the terminal output to follow along. The build and deployment takes a few minutes.
+
 ### Enable Auto Mode
 
-To allow Claude to move through the build steps without requiring manual confirmation at each one:
+Once the first version has successfully deployed, enable Auto Mode to allow Claude to proceed through subsequent steps without requiring manual confirmation at each one:
 
 - Hold **Shift** and press **Tab** three times.
 - **Auto Mode** will appear at the bottom of the screen.
 
-Claude will now automatically:
-
-- Detect DuploCloud running locally via DevKit
-- Identify the extension and compile it
-- Deploy it to your DuploCloud instance
-
-Watch the terminal output to follow along. The build and deployment takes a few minutes.
+You'll want this active before starting the iteration work in Step 8.
 
 ---
 
@@ -153,10 +151,10 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 2. Click **New Assessment**.
 3. Select your target region (e.g., **US West 2**).
-4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results. There are some tagged resources that are designed to generate a SOC2 finding. 
+4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
 5. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026`
 6. Select the minimum severity of findings to include.
-7. Start the assessment and allow it to run to completion _(click **Track Provisioning Status** to follow the agent's progress)_.
+7. Start the assessment and allow it to run to completion _(click the assessment name to open it, then click **Track Provisioning Status** to follow the agent's progress)_.
 
 ### Reading the Results
 
@@ -196,7 +194,7 @@ This flow requires a **GitHub scope**. If you haven't added one yet, do so first
 
 1. Go to **DuploCloud Admin → Providers → Source Control**.
 2. Click **Create New Provider**.
-3. Set the name to `GitHub`, leave the type as **GitHub.com** (self-hosted GitHub Enterprise is also supported if needed).
+3. Set the name to `GitHub`, leave the type as **GitHub**, and leave the hostname as **github.com**.
 4. Provide a **personal access token** with access to your GitHub account.
 5. Give the scope a name (e.g., `GitHub Scope`) and click **Create**.
 6. When prompted, click **Attach** to add it to your DevKit workspace.
