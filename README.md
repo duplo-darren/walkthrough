@@ -47,8 +47,8 @@ The automated setup will:
 - **Register DevKit** using the email address you used to sign up for the workshop
 - Send a **license confirmation email** to that address — open it and click **Approve Request**, then return to the Code Server tab
 - Automatically detect the approval and continue
-- Configure **Amazon Bedrock** via the DuploCloud account for LLM access
 - Set up **Docker** (images are pre-staged, so this is fast)
+- Configure **Amazon Bedrock** via the DuploCloud account for LLM access
 - Register the relevant **scopes** (AWS account and Kubernetes cluster)
 - Download a pre-scaffolded SOC 2 extension from S3 to save time during the session
 
