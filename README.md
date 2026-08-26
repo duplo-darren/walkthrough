@@ -120,11 +120,11 @@ Once logged in:
 
 Return to Code Server. Claude is ready at the prompt.
 
-DevKit includes a skill called **`duplo-extension-dev`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time.
+DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time.
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill.
+1. At the Claude prompt, invoke the **`duplo-extension`** skill.
 2. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 3. When prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**.
 4. Press **Enter** to confirm — Claude is ready to proceed.
@@ -162,7 +162,7 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 
 The assessment produces a findings table. Key things to note:
 
-- **Source indicator** — a pill/badge appears on rows where the resource is managed by Terraform, indicating that any fix should also be delivered via Terraform to keep infrastructure-as-code consistent.
+- **Source indicator** — a pill/badge appears on rows where the resource is managed by Terraform, indicating that any fix should also be delivered via Terraform to keep infrastructure-as-code consistent. These rows are also shaded for ease of identification.
 - **Resolve button** — appears at the end of each row and triggers the remediation workflow for that finding.
 
 ---
@@ -249,7 +249,7 @@ Your workshop environment stays available after the session. Some things to try 
 
 - Run a full SOC 2 assessment with all trust service criteria enabled
 - Explore the Kubernetes scope and run queries against cluster resources
-- Build a net-new extension from scratch using the `duplo-extension-dev` skill wizard
+- Build a net-new extension from scratch using the `duplo-extension` skill wizard
 - Experiment with additional remediation workflows and pull request flows
 - Explore the DuploCloud admin interface and workspace/scope configuration
 
