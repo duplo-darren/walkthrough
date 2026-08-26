@@ -138,7 +138,10 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 2. Click **New Assessment**.
 3. Select your target region (e.g., **US West 2**).
-4. Start the assessment and allow it to run to completion.
+4. In resource tag filter, specify a Tag **Name** of _Extension_ and **Value** of _soc2-posture_ to narrow down the results.
+5. Provide a link to the GitHub repo that includes the terraform to also be considered in remediation. **[https://github.com/duplo-darren/aws](https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026)**
+7. Select the severity of findings to use as minimum
+8. Start the assessment and allow it to run to completion. _(Can click on Track Provisioning Status to see the progress from the agent)_
 
 ### Reading the Results
 
