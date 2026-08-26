@@ -120,11 +120,16 @@ Once logged in:
 
 Return to Code Server. Claude is ready at the prompt.
 
-DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time.
+DevKit includes two skills for working with extensions:
+
+- **`/duplo-extension`** — starts the full creation wizard from scratch, walking you through scaffolding a new extension step by step
+- **`/duplo-extension-dev`** — the general development skill for working with extensions in progress; in this workshop we're using it to pick up the pre-scaffolded `soc2-posture` extension and take it through to build and deploy
+
+For this workshop, the SOC 2 Posture extension has been pre-scaffolded to save time, so we'll use `/duplo-extension-dev` — it will detect the existing `soc2-posture` extension and proceed straight to build and deploy.
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`duplo-extension`** skill.
+1. At the Claude prompt, invoke the **`/duplo-extension-dev`** skill.
 2. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 3. When prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**.
 4. Press **Enter** to confirm — Claude is ready to proceed.
