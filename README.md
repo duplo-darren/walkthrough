@@ -133,7 +133,7 @@ Watch the terminal output to follow along. The build and deployment takes a few 
 
 ## Step 6: Run a SOC 2 Posture Assessment
 
-Once the extension is deployed and visible in DuploCloud:
+Once the extension is deployed and visible in DuploCloud (this might require a hard refresh of your browser):
 
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 2. Click **New Assessment**.
