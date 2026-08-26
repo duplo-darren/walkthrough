@@ -154,7 +154,7 @@ The assessment produces a findings table. Key things to note:
 
 ## Step 7: Remediate Findings
 
-DuploCloud supports two remediation paths depending on how the resource is managed.
+This extension supports two remediation paths depending on how the resource is managed.
 
 ---
 
