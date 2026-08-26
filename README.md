@@ -119,11 +119,11 @@ Once logged in:
 
 Return to Code Server. Claude is ready at the prompt.
 
-DevKit includes a skill called **`duplo-extension-dev`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time.
+DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time.
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill.
+1. At the Claude prompt, invoke the **`/duplo-extension`** skill.
 2. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 3. When prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**.
 4. Press **Enter** to confirm — Claude is ready to proceed.
@@ -152,7 +152,7 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 2. Click **New Assessment**.
 3. Select your target region (e.g., **US West 2**).
-4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
+4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results. There are some resources in this region with that tag that will deliberately generate SOC2 Security findings. 
 5. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026`
 6. Select the minimum severity of findings to include.
 7. Start the assessment and allow it to run to completion _(click **Track Provisioning Status** to follow the agent's progress)_.
@@ -161,7 +161,7 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 
 The assessment produces a findings table. Key things to note:
 
-- **Source indicator** — a pill/badge appears on rows where the resource is managed by Terraform, indicating that any fix should also be delivered via Terraform to keep infrastructure-as-code consistent.
+- **Source indicator** — a pill/badge appears on rows where the resource is managed by Terraform, indicating that any fix should also be delivered via Terraform to keep infrastructure-as-code consistent. These rows are also shaded for ease of identification. 
 - **Resolve button** — appears at the end of each row and triggers the remediation workflow for that finding.
 
 ---
@@ -189,7 +189,7 @@ This extension supports two remediation paths depending on how the resource is m
 
 **Example finding:** *Security group allows RDP port 3389 open to the world*
 
-This flow requires a **GitHub scope**. If you haven't added one yet, do so first.
+This flow requires a **GitHub scope**. If you haven't added one yet, do so first. You can use your own personal GitHub account which will fork the repo and result in a Pull Request. 
 
 #### Add a GitHub Source Control Provider
 
@@ -223,7 +223,7 @@ Navigate to the **Remediations** tab (top-right of the SOC 2 Posture view) to se
 
 ## Step 8: Iterate on the Extension
 
-A core strength of DevKit is that you can iterate on an extension without starting from scratch. Claude has visibility into the extension source code and can make targeted changes, rebuild, and redeploy — all from a single prompt.
+A core strength of DevKit is that you can iterate on an extension without starting from scratch. The coding agent has visibility into the extension source code and can make targeted changes, rebuild, and redeploy — all from a single prompt.
 
 ### Add the Availability Trust Services Criteria
 
@@ -231,7 +231,7 @@ A core strength of DevKit is that you can iterate on an extension without starti
 2. Enter the following:
 
    ```
-   Extend the SOC 2 Posture extension to enable the Availability trust services criteria.
+   Enable the Availability trust services criteria for the soc2-posture extension.
    ```
 
 3. Claude will analyze the existing extension code, implement the required additions, rebuild the extension, and push it to DuploCloud.
