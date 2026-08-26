@@ -124,7 +124,7 @@ DevKit includes a skill called **`duplo-extension`** which guides you through bu
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`duplo-extension`** skill.
+1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill. This should skip the initial check and identify the existing soc2-posture extension. 
 2. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 3. When prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**.
 4. Press **Enter** to confirm — Claude is ready to proceed.
