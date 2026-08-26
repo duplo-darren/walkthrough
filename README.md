@@ -28,6 +28,20 @@ Before starting, confirm you have:
 
 A workshop environment has been pre-provisioned in a DuploCloud-managed AWS account specifically for you. It includes an EC2 instance with Code Server already running, and DevKit configured to install automatically on first launch.
 
+### Environment Permissions
+
+The EC2 instance runs with an IAM instance role that has been scoped specifically for this workshop:
+
+| Permission | Access |
+|---|---|
+| Amazon Bedrock | ✅ Full access (required for Claude Code and the AI agent) |
+| AWS Read (IAM, EC2, S3, etc.) | ✅ Read-only (used by the SOC 2 Posture extension to audit your environment) |
+| AWS Write | ❌ No write access via the instance role |
+
+> **Note:** In this workshop environment, the DuploCloud agent uses the same IAM role and permissions as the instance role — so write access is unavailable through either path. In production deployments, DuploCloud supports assigning different roles and permission levels to meet your organization's requirements, allowing the agent to take actions (such as CLI-based remediations) while still routing everything through the human-in-the-loop approval flow.
+
+### Connect
+
 1. Open the workshop invitation email from **DuploCloud Workshops**.
 2. Click **Open Your Workspace** — this takes you directly to Code Server.
 3. Enter the password from the email when prompted.
@@ -138,10 +152,10 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 2. Click **New Assessment**.
 3. Select your target region (e.g., **US West 2**).
-4. In resource tag filter, specify a Tag **Name** of _Extension_ and **Value** of _soc2-posture_ to narrow down the results.
-5. Provide a link to the GitHub repo that includes the terraform to also be considered in remediation. **[https://github.com/duplo-darren/aws](https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026)**
-7. Select the severity of findings to use as minimum
-8. Start the assessment and allow it to run to completion. _(Can click on Track Provisioning Status to see the progress from the agent)_
+4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
+5. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026`
+6. Select the minimum severity of findings to include.
+7. Start the assessment and allow it to run to completion _(click **Track Provisioning Status** to follow the agent's progress)_.
 
 ### Reading the Results
 
