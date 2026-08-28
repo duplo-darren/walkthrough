@@ -2,7 +2,7 @@
 
 ## Overview
 
-Welcome to the DuploCloud DevKit Workshop. This guide walks you through your pre-provisioned workshop environment — from first login all the way through building, deploying, and iterating on a DuploCloud extension.
+Welcome to the DuploCloud DevKit Workshop. This guide walks you through your pre-provisioned workshop environment — from first login all the way through building, deploying, and iterating on DuploCloud extensions across two different real-world patterns.
 
 By the end of this workshop you will have:
 
@@ -12,6 +12,9 @@ By the end of this workshop you will have:
 - Run a posture assessment against your cloud environment
 - Remediated security findings via CLI commands and Terraform pull requests
 - Iteratively extended the SOC 2 Posture extension to add new capability
+- Built a second extension — **Ephemeral Environments** — using the extension wizard, starting from a pre-scaffolded base
+- Provisioned independent application stacks into Kubernetes from different GitHub branches, each accessible via its own DNS name
+- Extended a deployed extension with a new feature (automatic expiration scheduling) using a single prompt
 
 ---
 
@@ -21,6 +24,9 @@ Before starting, confirm you have:
 
 - Registered as a workshop attendee
 - Received a **DuploCloud Workshops** invitation email containing your instance links and credentials
+- A **GitHub account** with the ability to generate a personal access token — required for the Terraform pull request remediation flow in Step 7 and the source control provider setup that the Ephemeral Environments extension depends on
+
+> **Note:** No local tooling is required. Everything in this workshop runs inside a cloud-hosted Code Server environment — your browser is the only client you need.
 
 ---
 
@@ -120,19 +126,14 @@ Once logged in:
 
 Return to Code Server. Claude is ready at the prompt.
 
-DevKit includes two skills for working with extensions:
-
-- **`/duplo-extension`** — starts the full creation wizard from scratch, walking you through scaffolding a new extension step by step
-- **`/duplo-extension-dev`** — the general development skill for working with extensions in progress; in this workshop we're using it to pick up the pre-scaffolded `soc2-posture` extension and take it through to build and deploy
-
-For this workshop, the SOC 2 Posture extension has been pre-scaffolded to save time, so we'll use `/duplo-extension-dev` — it will detect the existing `soc2-posture` extension and proceed straight to build and deploy.
+DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time. We'll use the **`duplo-extension-dev`** child skill for this next step.
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`/duplo-extension-dev`** skill.
-2. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
-3. When prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**.
-4. Press **Enter** to confirm — Claude is ready to proceed.
+1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill.
+2. The skill will load information and may prompt to enable auto mode, do **not** allow auto mode at this point.
+3. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
+4. If prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**. Press **Enter** to confirm — Claude is ready to proceed.
 
 Walk through each prompt manually for this first deployment — it's worth seeing exactly what Claude is doing at each stage as it detects DuploCloud running locally, identifies the extension, compiles it, and deploys it to your DuploCloud instance.
 
@@ -155,7 +156,7 @@ Once the extension is deployed and visible in DuploCloud (this might require a h
 
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 2. Click **New Assessment**.
-3. Select your target region (e.g., **US West 2**).
+3. Choose **us-west-2** as the region as there are some resources deployed there that are deliberately misconfigured.
 4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
 5. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026`
 6. Select the minimum severity of findings to include.
@@ -246,15 +247,196 @@ You can continue iterating: add criteria one at a time to validate each addition
 
 ---
 
+## Step 9: Build the Ephemeral Environments Extension
+
+Now that you've seen the full build-and-iterate cycle with the SOC 2 Posture extension, you'll build a second, different type of extension: **Ephemeral Environments**. This extension lets you specify a GitHub repository, branch, and Helm release name, and provision a complete application stack into your dedicated Kubernetes namespace on demand — making it a practical tool for feature branch testing, experimentation, and demo environments.
+
+### Reset Your Session
+
+Before starting, clear Claude's context from the previous extension:
+
+1. Either open a new terminal, or at the Claude prompt type:
+
+   ```
+   /clear
+   ```
+
+This resets the conversation memory so Claude starts fresh for the new extension.
+
+> If Auto Mode is still active from Step 8, turn it off now — you'll want to step through the wizard prompts manually first. Hold **Shift** and press **Tab** three times until **Manual Mode** appears at the bottom of the screen.
+
+---
+
+### Use the Extension Wizard
+
+This time you'll use the **`duplo-extension`** skill directly (not the `-dev` child skill) so you can see what the wizard experience looks like when starting from scratch. The extension is pre-scaffolded in the extensions folder, so the build itself will be fast — but walking through the wizard gives you a feel for how you'd approach a net-new extension in your own environment.
+
+1. At the Claude prompt, invoke the **`duplo-extension`** skill:
+
+   ```
+   /duplo-extension
+   ```
+
+2. When prompted for a **target platform**, select **Local DevKit** and press **Enter**.
+
+3. The wizard will display a **sample markdown template** showing the structure you'd use to describe a net-new extension from scratch:
+
+   ```
+   ## What you want to build
+   A Jenkins Job resource – trigger a Jenkins build from DuploCloud and track its outcome.
+
+   ## Inputs (what the user fills in when creating one)
+   - job name (required)
+   - branch (default: main)
+   - build parameters (optional, key-value)
+
+   ## What should happen (what provisioning does with the inputs)
+   Call Jenkins to start the build, poll until it finishes, capture the build number and result.
+
+   ## Result to show
+   - build number
+   - status (SUCCESS / FAILED)
+   - duration
+   - link to the console log
+   ```
+
+   In your own projects, you'd copy this structure and adapt it to describe whatever you want to build. For this workshop, you'll bypass the template and point Claude directly at the pre-scaffolded extension instead.
+
+4. When prompted for a template or description of what to build, enter:
+
+   ```
+   Build the extension currently located in the extensions folder called ephemeral-environments.
+   ```
+
+   Claude will scan the extensions directory, identify the pre-scaffolded extension, and confirm what it found — similar to the SOC 2 flow.
+
+5. If prompted for a **verification method** — whether the agent should run its own test validations or whether you'll verify manually in the UI — choose **verify in the UI yourself**.
+
+6. Claude will produce a build plan summarizing what it intends to do. When prompted to proceed, confirm and then **enable Auto Mode** so Claude can build and deploy without pausing at each step:
+
+   - Hold **Shift** and press **Tab** three times until **Auto Mode** appears at the bottom of the screen.
+
+7. Wait for Claude to confirm the extension has been successfully deployed, then do a hard refresh of your DuploCloud browser tab.
+
+---
+
+### Navigate to the Extension
+
+The Ephemeral Environments extension is registered under the **DevOps** section of the left-hand navigation menu. In DuploCloud, the placement of an extension in the navigation is defined at build time — for this extension, it lives under **DevOps** because it centres on deployment and environment lifecycle workflows.
+
+1. In DuploCloud, expand **DevOps** in the left-hand navigation.
+2. Click **Ephemeral Environments**.
+
+---
+
+## Step 10: Provision Ephemeral Environments
+
+With the extension deployed, you'll create two environments from the same application repository — one from the `main` branch and one from a `dark-mode` feature branch — to demonstrate how the same codebase can be deployed independently for testing or experimentation.
+
+The sample application consists of a frontend, a catalogue backend, an inventory backend, and a Postgres database. Note that the database does not persist between sessions in this workshop environment — it is fully ephemeral by design.
+
+---
+
+### Create the First Environment (Main Branch)
+
+1. Click **Create Ephemeral Environment** in the top-right corner of the extension view.
+2. Fill in the fields as follows:
+
+   | Field | Value |
+   |---|---|
+   | Name | `e-comm` |
+   | GitHub Repo URL | *(leave as pre-filled)* |
+   | Chart Path | *(leave as pre-filled)* |
+   | Git Ref | `main` |
+   | Helm Release Name | `e-comm` |
+   | Kubernetes Scope | *(leave as pre-filled)* |
+   | Namespace | *(leave blank — defaults to your scoped namespace)* |
+   | Image Tag Overrides | *(leave empty)* |
+
+3. Click **Provision**.
+4. On the next screen, click the environment name to open it, then click **Track Provisioning Status** to follow the agent's progress as it clones the repository and deploys via Helm.
+
+Once provisioning completes, the extension displays a deployment summary including:
+
+- An **AWS-generated ALB address** for immediate access
+- A **friendly DNS name** in the format `release-name-namespace.workshops.duplocloud.net`, created automatically via ExternalDNS and AWS Certificate Manager
+
+> **Note:** It takes a few minutes for the DNS name to become publicly resolvable after provisioning completes. Proceed to create the second environment while you wait.
+
+---
+
+### Create the Second Environment (Feature Branch)
+
+1. Click **Back** to return to the Ephemeral Environments list.
+2. Click **Create Ephemeral Environment** again.
+3. Fill in the fields as follows:
+
+   | Field | Value |
+   |---|---|
+   | Name | `dark-mode` |
+   | Chart Path | *(leave as pre-filled)* |
+   | Git Ref | `dark-mode` |
+   | Helm Release Name | `dark-mode` |
+   | Kubernetes Scope | *(leave as pre-filled)* |
+   | Namespace | *(leave blank)* |
+
+4. Click **Provision** and track provisioning status as before.
+
+Once both environments are running, you'll have two fully independent deployments of the same application — one with the standard light theme, one with the dark mode theme — each accessible via its own DNS name.
+
+---
+
+### Deprovision an Environment
+
+When you're done with an environment, tear it down in either of two ways:
+
+- Click the environment name to open it, then click **Deprovision Now** on the right-hand side, or
+- Click the **three-dot menu** next to the environment name in the list and select **Deprovision Now**.
+
+---
+
+## Step 11: Add an Expiration Date Feature
+
+A persistent ephemeral environment that someone forgets to deprovision will continue accruing cost. To address this, you'll extend the extension with an automatic expiration capability — demonstrating how DevKit lets you add new features to a deployed extension with a single prompt.
+
+1. Return to Code Server — Claude should still be at the prompt with Auto Mode active.
+2. Enter the following prompt:
+
+   ```
+   Modify the extension for ephemeral environments to add an expiration date and time where the environment will be torn down automatically.
+   ```
+
+3. Claude will analyse the existing extension code, implement the expiration logic, rebuild the extension, and redeploy it to DuploCloud — all without further prompts unless it needs clarification.
+
+4. Once the build completes, return to DuploCloud, refresh the **Ephemeral Environments** view, and click **Create Ephemeral Environment**.
+
+5. An **expiration date and time** field will now appear in the creation form, allowing you to schedule automatic teardown at provisioning time.
+
+> **Note:** Expiration firing may require a reload of the DevKit environment in this workshop context. In a production deployment this behaviour is fully reliable — the workshop environment is intentionally constrained to keep scope focused.
+
+---
+
 ## What's Next?
 
-Your workshop environment stays available after the session. Some things to try on your own:
+Your workshop environment stays available after the session. Here are some directions worth exploring:
 
-- Run a full SOC 2 assessment with all trust service criteria enabled
-- Explore the Kubernetes scope and run queries against cluster resources
-- Build a net-new extension from scratch using the `duplo-extension` skill wizard
-- Experiment with additional remediation workflows and pull request flows
-- Explore the DuploCloud admin interface and workspace/scope configuration
+**SOC 2 Posture**
+- Run a full assessment with all five trust service criteria enabled
+- Work through the remaining findings and exercise both remediation paths — CLI and Terraform PR — on different resource types
+- Try modifying the extension itself: add a new check, adjust severity thresholds, or change how findings are grouped in the output
+
+**Ephemeral Environments**
+- Provision additional environments from different branches or forks of the sample repo
+- Extend the extension further — for example, add a Slack notification on provisioning and expiry, surface estimated cost for a running environment, or add a list of all Kubernetes resources created per environment
+- Build an equivalent extension targeting a different Helm chart or a different deployment pattern entirely
+
+**Building from Scratch**
+- Use the `duplo-extension` wizard with a blank template to spec and build a net-new extension — the Jenkins example in the wizard is a good starting point, or bring your own integration idea
+- Try the `-dev` child skill on a pre-existing codebase you own to see how Claude handles unfamiliar extension code
+
+**Platform Exploration**
+- Explore the Kubernetes scope: run queries against cluster resources, inspect your namespace, and see how the agent handles Kubernetes context
+- Review the DuploCloud admin interface — workspace configuration, scope management, and provider settings are all accessible and worth understanding before taking DevKit into a production environment
 
 ---
 
