@@ -24,7 +24,6 @@ Before starting, confirm you have:
 
 - Registered as a workshop attendee
 - Received a **DuploCloud Workshops** invitation email containing your instance links and credentials
-- A **GitHub account** with the ability to generate a personal access token — required for the Terraform pull request remediation flow in Step 7 and the source control provider setup that the Ephemeral Environments extension depends on
 
 > **Note:** No local tooling is required. Everything in this workshop runs inside a cloud-hosted Code Server environment — your browser is the only client you need.
 
@@ -194,22 +193,13 @@ This extension supports two remediation paths depending on how the resource is m
 
 **Example finding:** *Security group allows RDP port 3389 open to the world*
 
-This flow requires a **GitHub scope**. If you haven't added one yet, do so first.
-
-#### Add a GitHub Source Control Provider
-
-1. Go to **DuploCloud Admin → Providers → Source Control**.
-2. Click **Create New Provider**.
-3. Set the name to `GitHub`, leave the type as **GitHub**, and leave the hostname as **github.com**.
-4. Provide a **personal access token** with access to your GitHub account.
-5. Give the scope a name (e.g., `GitHub Scope`) and click **Create**.
-6. When prompted, click **Attach** to add it to your DevKit workspace.
+This flow uses a **GitHub scope** that has been pre-configured in your workshop environment — no setup required. The scope is backed by a workshop-provided token with access to the sample repository.
 
 #### Raise a Remediation Pull Request
 
 1. Return to the SOC 2 Posture findings.
 2. Find the **RDP 3389 open to world** finding and click **Resolve**.
-3. Select your **GitHub Scope** and **AWS Instance Role**.
+3. Select the pre-configured **GitHub Scope** and **AWS Instance Role**.
 4. Click **Resolve** — DuploCloud opens a child ticket to generate the Terraform fix.
 5. Click **Track Provision Status** to follow progress.
 6. When prompted for a value (e.g., allowed IP/CIDR range), click **Provide Value**, enter the IP with subnet mask (e.g., `8.8.8.8/32`), and click **Submit**.
