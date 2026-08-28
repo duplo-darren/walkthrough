@@ -241,6 +241,152 @@ You can continue iterating: add criteria one at a time to validate each addition
 
 ---
 
+## Step 9: Build the Ephemeral Environments Extension
+
+Now that you've seen the full build-and-iterate cycle with the SOC 2 Posture extension, you'll build a second, different type of extension: **Ephemeral Environments**. This extension lets you specify a GitHub repository, branch, and Helm release name, and provision a complete application stack into your dedicated Kubernetes namespace on demand — making it a practical tool for feature branch testing, experimentation, and demo environments.
+
+### Reset Your Session
+
+Before starting, clear Claude's context from the previous extension:
+
+1. Either open a new terminal, or at the Claude prompt type:
+
+   ```
+   /clear
+   ```
+
+This resets the conversation memory so Claude starts fresh for the new extension.
+
+> If Auto Mode is still active from Step 8, turn it off now — you'll want to step through the wizard prompts manually first. Hold **Shift** and press **Tab** three times until **Manual Mode** appears at the bottom of the screen.
+
+---
+
+### Use the Extension Wizard
+
+This time you'll use the **`duplo-extension`** skill directly (not the `-dev` child skill) so you can see what the wizard experience looks like when starting from scratch. The extension is pre-scaffolded in the extensions folder, so the build itself will be fast — but walking through the wizard gives you a feel for how you'd approach a net-new extension in your own environment.
+
+1. At the Claude prompt, invoke the **`duplo-extension`** skill:
+
+   ```
+   /duplo-extension
+   ```
+
+2. When prompted for a **target platform**, select **Local DevKit** and press **Enter**.
+
+3. When prompted for a template or description of what to build, enter:
+
+   ```
+   Build the extension currently located in the extensions folder called ephemeral-environments.
+   ```
+
+   Claude will scan the extensions directory, identify the pre-scaffolded extension, and confirm what it found — similar to the SOC 2 flow.
+
+4. If prompted for a **verification method** — whether the agent should run its own test validations or whether you'll verify manually in the UI — choose **verify in the UI yourself**.
+
+5. Claude will produce a build plan summarizing what it intends to do. When prompted to proceed, confirm and then **enable Auto Mode** so Claude can build and deploy without pausing at each step:
+
+   - Hold **Shift** and press **Tab** three times until **Auto Mode** appears at the bottom of the screen.
+
+6. Wait for Claude to confirm the extension has been successfully deployed, then do a hard refresh of your DuploCloud browser tab.
+
+---
+
+### Navigate to the Extension
+
+The Ephemeral Environments extension is registered under the **DevOps** section of the left-hand navigation menu. In DuploCloud, the placement of an extension in the navigation is defined at build time — for this extension, it lives under **DevOps** because it centres on deployment and environment lifecycle workflows.
+
+1. In DuploCloud, expand **DevOps** in the left-hand navigation.
+2. Click **Ephemeral Environments**.
+
+---
+
+## Step 10: Provision Ephemeral Environments
+
+With the extension deployed, you'll create two environments from the same application repository — one from the `main` branch and one from a `dark-mode` feature branch — to demonstrate how the same codebase can be deployed independently for testing or experimentation.
+
+The sample application consists of a frontend, a catalogue backend, an inventory backend, and a Postgres database. Note that the database does not persist between sessions in this workshop environment — it is fully ephemeral by design.
+
+---
+
+### Create the First Environment (Main Branch)
+
+1. Click **Create Ephemeral Environment** in the top-right corner of the extension view.
+2. Fill in the fields as follows:
+
+   | Field | Value |
+   |---|---|
+   | Name | `e-comm` |
+   | GitHub Repo URL | *(leave as pre-filled)* |
+   | Chart Path | *(leave as pre-filled)* |
+   | Git Ref | `main` |
+   | Helm Release Name | `e-comm` |
+   | Kubernetes Scope | *(leave as pre-filled)* |
+   | Namespace | *(leave blank — defaults to your scoped namespace)* |
+   | Image Tag Overrides | *(leave empty)* |
+
+4. Click **Provision**.
+5. On the next screen, click the environment name to open it, then click **Track Provisioning Status** to follow the agent's progress as it clones the repository and deploys via Helm.
+
+Once provisioning completes, the extension displays a deployment summary including:
+
+- An **AWS-generated ALB address** for immediate access
+- A **friendly DNS name** in the format `release-name-namespace.workshops.duplocloud.net`, created automatically via ExternalDNS and AWS Certificate Manager
+
+> **Note:** It takes a few minutes for the DNS name to become publicly resolvable after provisioning completes. Proceed to create the second environment while you wait.
+
+---
+
+### Create the Second Environment (Feature Branch)
+
+1. Click **Back** to return to the Ephemeral Environments list.
+2. Click **Create Ephemeral Environment** again.
+3. Fill in the fields as follows:
+
+   | Field | Value |
+   |---|---|
+   | Name | `dark-mode` |
+   | Chart Path | *(leave as pre-filled)* |
+   | Git Ref | `dark-mode` |
+   | Helm Release Name | `dark-mode` |
+   | Kubernetes Scope | *(leave as pre-filled)* |
+   | Namespace | *(leave blank)* |
+
+4. Click **Provision** and track provisioning status as before.
+
+Once both environments are running, you'll have two fully independent deployments of the same application — one with the standard light theme, one with the dark mode theme — each accessible via its own DNS name.
+
+---
+
+### Deprovision an Environment
+
+When you're done with an environment, tear it down in either of two ways:
+
+- Click the environment name to open it, then click **Deprovision Now** on the right-hand side, or
+- Click the **three-dot menu** next to the environment name in the list and select **Deprovision Now**.
+
+---
+
+## Step 11: Add an Expiration Date Feature
+
+A persistent ephemeral environment that someone forgets to deprovision will continue accruing cost. To address this, you'll extend the extension with an automatic expiration capability — demonstrating how DevKit lets you add new features to a deployed extension with a single prompt.
+
+1. Return to Code Server — Claude should still be at the prompt with Auto Mode active.
+2. Enter the following prompt:
+
+   ```
+   Modify the extension for ephemeral environments to add an expiration date and time where the environment will be torn down automatically.
+   ```
+
+3. Claude will analyse the existing extension code, implement the expiration logic, rebuild the extension, and redeploy it to DuploCloud — all without further prompts unless it needs clarification.
+
+4. Once the build completes, return to DuploCloud, refresh the **Ephemeral Environments** view, and click **Create Ephemeral Environment**.
+
+5. An **expiration date and time** field will now appear in the creation form, allowing you to schedule automatic teardown at provisioning time.
+
+> **Note:** Expiration firing may require a reload of the DevKit environment in this workshop context. In a production deployment this behaviour is fully reliable — the workshop environment is intentionally constrained to keep scope focused.
+
+---
+
 ## What's Next?
 
 Your workshop environment stays available after the session. Some things to try on your own:
