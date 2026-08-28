@@ -202,7 +202,8 @@ This flow uses a **GitHub scope** that has been pre-configured in your workshop 
 3. Select the pre-configured **GitHub Scope** and **AWS Instance Role**.
 4. Click **Resolve** — DuploCloud opens a child ticket to generate the Terraform fix.
 5. Click **Track Provision Status** to follow progress.
-6. When prompted for a value (e.g., allowed IP/CIDR range), click **Provide Value**, enter the IP with subnet mask (e.g., `8.8.8.8/32`), and click **Submit**.
+6. When the ticket indicates it is waiting for input, click the **back arrow** to return to the previous page — the **Provide Value** button will appear there.
+7. When prompted for a value (e.g., allowed IP/CIDR range), click **Provide Value**, enter the IP with subnet mask (e.g., `8.8.8.8/32`), and click **Submit**.
 7. DuploCloud reruns the remediation script with the value you provided and generates a pull request.
 8. Click **View Pull Request** to inspect the diff in GitHub — confirm the change looks correct, then merge if satisfied.
 
