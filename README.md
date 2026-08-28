@@ -2,7 +2,7 @@
 
 ## Overview
 
-Welcome to the DuploCloud DevKit Workshop. This guide walks you through your pre-provisioned workshop environment — from first login all the way through building, deploying, and iterating on a DuploCloud extension.
+Welcome to the DuploCloud DevKit Workshop. This guide walks you through your pre-provisioned workshop environment — from first login all the way through building, deploying, and iterating on DuploCloud extensions across two different real-world patterns.
 
 By the end of this workshop you will have:
 
@@ -12,6 +12,9 @@ By the end of this workshop you will have:
 - Run a posture assessment against your cloud environment
 - Remediated security findings via CLI commands and Terraform pull requests
 - Iteratively extended the SOC 2 Posture extension to add new capability
+- Built a second extension — **Ephemeral Environments** — using the extension wizard, starting from a pre-scaffolded base
+- Provisioned independent application stacks into Kubernetes from different GitHub branches, each accessible via its own DNS name
+- Extended a deployed extension with a new feature (automatic expiration scheduling) using a single prompt
 
 ---
 
@@ -21,6 +24,8 @@ Before starting, confirm you have:
 
 - Registered as a workshop attendee
 - Received a **DuploCloud Workshops** invitation email containing your instance links and credentials
+
+> **Note:** No local tooling is required. Everything in this workshop runs inside a cloud-hosted Code Server environment — your browser is the only client you need.
 
 ---
 
@@ -120,12 +125,12 @@ Once logged in:
 
 Return to Code Server. Claude is ready at the prompt.
 
-DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time. We'll use the **`duplo-extension-dev`** child skill for this next step. 
+DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time. We'll use the **`duplo-extension-dev`** child skill for this next step.
 
 ### Build Steps
 
 1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill.
-2. The skill will load information and may prompt to enable auto mode, do **not** allow auto mode at this point. 
+2. The skill will load information and may prompt to enable auto mode, do **not** allow auto mode at this point.
 3. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 4. If prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**. Press **Enter** to confirm — Claude is ready to proceed.
 
@@ -188,25 +193,17 @@ This extension supports two remediation paths depending on how the resource is m
 
 **Example finding:** *Security group allows RDP port 3389 open to the world*
 
-This flow requires a **GitHub scope**. If you haven't added one yet, do so first.
-
-#### Add a GitHub Source Control Provider
-
-1. Go to **DuploCloud Admin → Providers → Source Control**.
-2. Click **Create New Provider**.
-3. Set the name to `GitHub`, leave the type as **GitHub**, and leave the hostname as **github.com**.
-4. Provide a **personal access token** with access to your GitHub account.
-5. Give the scope a name (e.g., `GitHub Scope`) and click **Create**.
-6. When prompted, click **Attach** to add it to your DevKit workspace.
+This flow uses a **GitHub scope** that has been pre-configured in your workshop environment — no setup required. The scope is backed by a workshop-provided token with access to the sample repository.
 
 #### Raise a Remediation Pull Request
 
 1. Return to the SOC 2 Posture findings.
 2. Find the **RDP 3389 open to world** finding and click **Resolve**.
-3. Select your **GitHub Scope** and **AWS Instance Role**.
+3. Select the pre-configured **GitHub Scope** and **AWS Instance Role**.
 4. Click **Resolve** — DuploCloud opens a child ticket to generate the Terraform fix.
 5. Click **Track Provision Status** to follow progress.
-6. When prompted for a value (e.g., allowed IP/CIDR range), click **Provide Value**, enter the IP with subnet mask (e.g., `8.8.8.8/32`), and click **Submit**.
+6. When the ticket indicates it is waiting for input, click the **back arrow** to return to the previous page — the **Provide Value** button will appear there.
+7. When prompted for a value (e.g., allowed IP/CIDR range), click **Provide Value**, enter the IP with subnet mask (e.g., `8.8.8.8/32`), and click **Submit**.
 7. DuploCloud reruns the remediation script with the value you provided and generates a pull request.
 8. Click **View Pull Request** to inspect the diff in GitHub — confirm the change looks correct, then merge if satisfied.
 
@@ -412,13 +409,25 @@ A persistent ephemeral environment that someone forgets to deprovision will cont
 
 ## What's Next?
 
-Your workshop environment stays available after the session. Some things to try on your own:
+Your workshop environment stays available after the session. Here are some directions worth exploring:
 
-- Run a full SOC 2 assessment with all trust service criteria enabled
-- Explore the Kubernetes scope and run queries against cluster resources
-- Build a net-new extension from scratch using the `duplo-extension` skill wizard
-- Experiment with additional remediation workflows and pull request flows
-- Explore the DuploCloud admin interface and workspace/scope configuration
+**SOC 2 Posture**
+- Run a full assessment with all five trust service criteria enabled
+- Work through the remaining findings and exercise both remediation paths — CLI and Terraform PR — on different resource types
+- Try modifying the extension itself: add a new check, adjust severity thresholds, or change how findings are grouped in the output
+
+**Ephemeral Environments**
+- Provision additional environments from different branches or forks of the sample repo
+- Extend the extension further — for example, add a Slack notification on provisioning and expiry, surface estimated cost for a running environment, or add a list of all Kubernetes resources created per environment
+- Build an equivalent extension targeting a different Helm chart or a different deployment pattern entirely
+
+**Building from Scratch**
+- Use the `duplo-extension` wizard with a blank template to spec and build a net-new extension — the Jenkins example in the wizard is a good starting point, or bring your own integration idea
+- Try the `-dev` child skill on a pre-existing codebase you own to see how Claude handles unfamiliar extension code
+
+**Platform Exploration**
+- Explore the Kubernetes scope: run queries against cluster resources, inspect your namespace, and see how the agent handles Kubernetes context
+- Review the DuploCloud admin interface — workspace configuration, scope management, and provider settings are all accessible and worth understanding before taking DevKit into a production environment
 
 ---
 
