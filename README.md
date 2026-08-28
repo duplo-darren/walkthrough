@@ -273,7 +273,30 @@ This time you'll use the **`duplo-extension`** skill directly (not the `-dev` ch
 
 2. When prompted for a **target platform**, select **Local DevKit** and press **Enter**.
 
-3. When prompted for a template or description of what to build, enter:
+3. The wizard will display a **sample markdown template** showing the structure you'd use to describe a net-new extension from scratch:
+
+   ```
+   ## What you want to build
+   A Jenkins Job resource – trigger a Jenkins build from DuploCloud and track its outcome.
+
+   ## Inputs (what the user fills in when creating one)
+   - job name (required)
+   - branch (default: main)
+   - build parameters (optional, key-value)
+
+   ## What should happen (what provisioning does with the inputs)
+   Call Jenkins to start the build, poll until it finishes, capture the build number and result.
+
+   ## Result to show
+   - build number
+   - status (SUCCESS / FAILED)
+   - duration
+   - link to the console log
+   ```
+
+   In your own projects, you'd copy this structure and adapt it to describe whatever you want to build. For this workshop, you'll bypass the template and point Claude directly at the pre-scaffolded extension instead.
+
+4. When prompted for a template or description of what to build, enter:
 
    ```
    Build the extension currently located in the extensions folder called ephemeral-environments.
@@ -281,13 +304,13 @@ This time you'll use the **`duplo-extension`** skill directly (not the `-dev` ch
 
    Claude will scan the extensions directory, identify the pre-scaffolded extension, and confirm what it found — similar to the SOC 2 flow.
 
-4. If prompted for a **verification method** — whether the agent should run its own test validations or whether you'll verify manually in the UI — choose **verify in the UI yourself**.
+5. If prompted for a **verification method** — whether the agent should run its own test validations or whether you'll verify manually in the UI — choose **verify in the UI yourself**.
 
-5. Claude will produce a build plan summarizing what it intends to do. When prompted to proceed, confirm and then **enable Auto Mode** so Claude can build and deploy without pausing at each step:
+6. Claude will produce a build plan summarizing what it intends to do. When prompted to proceed, confirm and then **enable Auto Mode** so Claude can build and deploy without pausing at each step:
 
    - Hold **Shift** and press **Tab** three times until **Auto Mode** appears at the bottom of the screen.
 
-6. Wait for Claude to confirm the extension has been successfully deployed, then do a hard refresh of your DuploCloud browser tab.
+7. Wait for Claude to confirm the extension has been successfully deployed, then do a hard refresh of your DuploCloud browser tab.
 
 ---
 
@@ -324,8 +347,8 @@ The sample application consists of a frontend, a catalogue backend, an inventory
    | Namespace | *(leave blank — defaults to your scoped namespace)* |
    | Image Tag Overrides | *(leave empty)* |
 
-4. Click **Provision**.
-5. On the next screen, click the environment name to open it, then click **Track Provisioning Status** to follow the agent's progress as it clones the repository and deploys via Helm.
+3. Click **Provision**.
+4. On the next screen, click the environment name to open it, then click **Track Provisioning Status** to follow the agent's progress as it clones the repository and deploys via Helm.
 
 Once provisioning completes, the extension displays a deployment summary including:
 
