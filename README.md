@@ -142,6 +142,7 @@ DevKit includes a skill called **`duplo-extension`** which guides you through bu
 3. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 4. If prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**. Press **Enter** to confirm — Claude is ready to proceed.
     _It may offer to run one or more of the register-* scripts. You dont need to worry about this, these have already been run to create the scopes we need for the workshop and these are idempotent._
+5. You may be prompted on testing, either choose or type `I will test myself`
 
 Walk through each prompt manually for this first deployment — it's worth seeing exactly what Claude is doing at each stage as it detects DuploCloud running locally, identifies the extension, compiles it, and deploys it to your DuploCloud instance.
 
@@ -163,12 +164,20 @@ You'll want this active before starting the iteration work in Step 8.
 Once the extension is deployed and visible in DuploCloud (this might require a hard refresh of your browser):
 
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
+
+![](images/soc2-loaded.png)
+
 2. Click **New Assessment**.
 3. Choose **us-west-2** as the region as there are some resources deployed there that are deliberately misconfigured.
 4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
 5. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026`
 6. Select the minimum severity of findings to include.
+
+![](images/soc2-form.png)
+
 7. Start the assessment and allow it to run to completion _(click the assessment name to open it, then click **Track Provisioning Status** to follow the agent's progress)_.
+
+
 
 ### Reading the Results
 
@@ -176,6 +185,13 @@ The assessment produces a findings table. Key things to note:
 
 - **Source indicator** — a pill/badge appears on rows where the resource is managed by Terraform, indicating that any fix should also be delivered via Terraform to keep infrastructure-as-code consistent. These rows are also shaded for ease of identification.
 - **Resolve button** — appears at the end of each row and triggers the remediation workflow for that finding.
+- **Filtering** - if all severities were selected, you can use the filter at the top to only focus on specific criteria such as Critical findings only. 
+
+![](images/soc2-findings.png)
+
+- **Finding detail** - Clicking on a finding will show more information such as the resource in scope for the finding and a link to the AWS documentation for that service. 
+
+~[](images/soc2-finding-detail.png)
 
 ---
 
@@ -191,7 +207,7 @@ This extension supports two remediation paths depending on how the resource is m
 
 1. Locate the finding in the table and click **Resolve**.
 2. Select the **AWS Instance Role** scope.
-3. Click **Resolve** — DuploCloud will surface the AWS CLI command needed to apply the fix, along with the affected account details.
+3. Click **Resolve** — DuploCloud will surface the AWS CLI command needed to apply the fix, along with the affected account details. If it needs a value specified, it will prompt for one. 
 4. Review the command. If you want to apply it directly, click **Execute Fix** — DuploCloud will use the AWS scope to run the command against the account.
 
 > CLI remediations are surfaced for human review first. You decide whether and when to apply them.
@@ -212,8 +228,14 @@ This flow uses a **GitHub scope** that has been pre-configured in your workshop 
 4. Click **Resolve** — DuploCloud opens a child ticket to generate the Terraform fix.
 5. Click **Track Provision Status** to follow progress.
 6. When the ticket indicates it is waiting for input, click the **back arrow** to return to the previous page — the **Provide Value** button will appear there.
+
+![](images/soc2-terraform-remediation-value.png
+)
 7. When prompted for a value (e.g., allowed IP/CIDR range), click **Provide Value**, enter the IP with subnet mask (e.g., `8.8.8.8/32`), and click **Submit**.
 7. DuploCloud reruns the remediation script with the value you provided and generates a pull request.
+
+![](images/soc2-terraform-remediation-pr-complete.png)
+
 8. Click **View Pull Request** to inspect the diff in GitHub — confirm the change looks correct, then merge if satisfied.
 
 > Delivering the fix via pull request keeps your infrastructure-as-code source of truth consistent. New environments provisioned from the same Terraform repository will also inherit the fix.
