@@ -74,6 +74,8 @@ The automated setup will:
 
 2. When you see **"Press any key to close terminal"**, hit any key to dismiss the pane.
 
+> **Note:** You will see a popup in the bottom right hand corner about an application being available, disregard this as its just the DevKit environment starting up.
+
 ---
 
 ## Step 3: Explore Code Server and Claude Code
@@ -139,6 +141,7 @@ DevKit includes a skill called **`duplo-extension`** which guides you through bu
 2. The skill will load information and may prompt to enable auto mode, do **not** allow auto mode at this point.
 3. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 4. If prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**. Press **Enter** to confirm — Claude is ready to proceed.
+    _It may offer to run one or more of the register-* scripts. You dont need to worry about this, these have already been run to create the scopes we need for the workshop and these are idempotent._
 
 Walk through each prompt manually for this first deployment — it's worth seeing exactly what Claude is doing at each stage as it detects DuploCloud running locally, identifies the extension, compiles it, and deploys it to your DuploCloud instance.
 
