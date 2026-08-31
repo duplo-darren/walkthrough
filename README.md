@@ -135,7 +135,7 @@ DevKit includes a skill called **`duplo-extension`** which guides you through bu
 2. The skill will load information and may prompt to enable auto mode, do **not** allow auto mode at this point.
 3. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 4. If prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**. Press **Enter** to confirm — Claude is ready to proceed.
-5.    It may offer to run one or more of the register-* scripts. You dont need to worry about this, these have already been run to create the scopes we need for the workshop.
+   It may offer to run one or more of the register-* scripts. You dont need to worry about this, these have already been run to create the scopes we need for the workshop.
 
 Walk through each prompt manually for this first deployment — it's worth seeing exactly what Claude is doing at each stage as it detects DuploCloud running locally, identifies the extension, compiles it, and deploys it to your DuploCloud instance.
 
