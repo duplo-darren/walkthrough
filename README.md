@@ -83,6 +83,9 @@ Code Server comes pre-configured with **Claude Code**, connected to Amazon Bedro
 **To launch Claude from the terminal:**
 
 1. Right-click in the grey area of the Code Server interface and choose **New Terminal**.
+
+![](images/terminal.png)
+
 2. Type `claude` and press **Enter**.
 3. A first-run setup wizard appears — press **Enter** to accept the defaults at each prompt.
 4. When asked about **workspace access**, choose **Trust This Folder** — this is required for Claude Code to function correctly.
@@ -118,6 +121,9 @@ Once logged in:
 ✅ This confirms DuploCloud is running and the agent can communicate with the backend LLM.
 
 > **Note:** Your workshop environment will remain available after the session ends, so don't worry about exploring every corner of DuploCloud right now — you'll have time to come back to it.
+
+![](images/validate.png)
+
 
 ---
 
