@@ -74,6 +74,8 @@ The automated setup will:
 
 2. When you see **"Press any key to close terminal"**, hit any key to dismiss the pane.
 
+> **Note:** You will see a popup in the bottom right hand corner about an application being available, disregard this as its just the DevKit environment starting up.
+
 ---
 
 ## Step 3: Explore Code Server and Claude Code
