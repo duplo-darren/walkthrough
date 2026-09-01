@@ -349,6 +349,8 @@ The Ephemeral Environments extension is registered under the **DevOps** section 
 1. In DuploCloud, expand **DevOps** in the left-hand navigation.
 2. Click **Ephemeral Environments**.
 
+![](images/eph-env-menu.png)
+
 ---
 
 ## Step 10: Provision Ephemeral Environments
@@ -362,6 +364,9 @@ The sample application consists of a frontend, a catalogue backend, an inventory
 ### Create the First Environment (Main Branch)
 
 1. Click **Create Ephemeral Environment** in the top-right corner of the extension view.
+
+![](images/eph-env-form.png
+)
 2. Fill in the fields as follows:
 
    | Field | Value |
@@ -413,7 +418,12 @@ Once both environments are running, you'll have two fully independent deployment
 When you're done with an environment, tear it down in either of two ways:
 
 - Click the environment name to open it, then click **Deprovision Now** on the right-hand side, or
+
+![](images/eph-env-deprov-button.png)
+
 - Click the **three-dot menu** next to the environment name in the list and select **Deprovision Now**.
+
+![](images/eph-env-deprov-menu.png)
 
 ---
 
