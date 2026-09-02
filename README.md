@@ -162,21 +162,24 @@ You'll want this active before starting the iteration work in Step 8.
 
 ## Step 6: Run a SOC 2 Posture Assessment
 
-Once the extension is deployed and visible in DuploCloud (this might require a hard refresh of your browser):
+Once the extension is deployed, switch back to the tab with DuploCloud and refresh the page:
 
 1. Navigate to the **SOC 2 Posture** extension inside DuploCloud.
 
 ![](images/soc2-loaded.png)
 
 2. Click **New Assessment**.
-3. Choose **us-west-2** as the region as there are some resources deployed there that are deliberately misconfigured.
-4. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
-5. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplo-darren/duplo-aws-workshop-sep2-2026`
-6. Select the minimum severity of findings to include.
+3. Give the assessment a name.
+4. Choose a GRC tool.
+5. Choose the AWS scope to use for this scan.
+6. Choose **us-west-2** as the region as there are some resources deployed there that are deliberately misconfigured.
+7. In the resource tag filter, specify a Tag **Name** of `Extension` and **Value** of `soc2-posture` to narrow down the results.
+8. Provide a link to the GitHub repo that includes the Terraform to also be considered in remediation: `https://github.com/duplocloud/duplo-workshop-aws` - this should be auto-filled.
+9. Select the minimum severity of findings to include.
 
 ![](images/soc2-form.png)
 
-7. Start the assessment and allow it to run to completion _(click the assessment name to open it, then click **Track Provisioning Status** to follow the agent's progress)_.
+10. Start the assessment and allow it to run to completion _(click the assessment name to open it, then click **Track Provisioning Status** to follow the agent's progress)_.
 
 
 
