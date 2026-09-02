@@ -195,7 +195,7 @@ The assessment produces a findings table. Key things to note:
 
 - **Finding detail** - Clicking on a finding will show more information such as the resource in scope for the finding and a link to the AWS documentation for that service. 
 
-~[](images/soc2-finding-detail.png)
+[](images/soc2-finding-detail.png)
 
 ---
 
