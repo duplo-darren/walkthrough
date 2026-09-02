@@ -108,9 +108,10 @@ Before building anything, confirm that DuploCloud and the AI agent are working a
 Once logged in:
 
 1. Select the **LLM Agent** (one option is available).
-2. Click **Select Scopes** — you will see two pre-configured scopes:
+2. Click **Select Scopes** — you will see three pre-configured scopes:
    - **AWS Account** — access to the workshop AWS environment
    - **Kubernetes Cluster** — access to your dedicated namespace within the cluster (no cluster-admin access)
+   - **GitHub** - a github-pat that grants access to some repos. 
 
 **Run a quick validation test:**
 
@@ -133,11 +134,11 @@ Once logged in:
 
 Return to Code Server. Claude is ready at the prompt.
 
-DevKit includes a skill called **`duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time. We'll use the **`duplo-extension-dev`** child skill for this next step.
+DevKit includes a skill called **`/duplo-extension`** which guides you through building DuploCloud extensions — either from scratch via a prompted wizard, or by working with an existing scaffolded codebase. For this workshop, the SOC 2 Posture extension has been pre-scaffolded to ensure we can complete the build within the session time. We'll use the **`duplo-extension-dev`** child skill for this next step.
 
 ### Build Steps
 
-1. At the Claude prompt, invoke the **`duplo-extension-dev`** skill.
+1. At the Claude prompt, invoke the **`/duplo-extension-dev`** skill.
 2. The skill will load information and may prompt to enable auto mode, do **not** allow auto mode at this point.
 3. Claude will scan the extensions directory, detect the pre-scaffolded extension, and confirm what it found.
 4. If prompted, indicate that you want to **build and deploy the existing SOC 2 Posture extension**. Press **Enter** to confirm — Claude is ready to proceed.
