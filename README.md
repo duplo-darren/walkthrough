@@ -240,7 +240,7 @@ This flow uses a **GitHub scope** that has been pre-configured in your workshop 
 
 ![](images/soc2-terraform-remediation-pr-complete.png)
 
-8. Click **View Pull Request** to inspect the diff in GitHub — confirm the change looks correct, then merge if satisfied.
+8. Click **View Pull Request** to inspect the diff in GitHub — confirm the change looks correct, then merge if satisfied. _You dont have permission to trigger this_
 
 > Delivering the fix via pull request keeps your infrastructure-as-code source of truth consistent. New environments provisioned from the same Terraform repository will also inherit the fix.
 
