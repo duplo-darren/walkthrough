@@ -266,7 +266,7 @@ A core strength of DevKit is that you can iterate on an extension without starti
    ```
 
 3. Claude will analyze the existing extension code, implement the required additions, rebuild the extension, and push it to DuploCloud.
-4. Once complete, return to DuploCloud and open **SOC 2 Posture**.
+4. Once complete, return to DuploCloud and open **SOC 2 Posture**. (Refresh the page first)
 5. Click **New Assessment** — **Availability** will now appear as an available criteria option.
 
 You can continue iterating: add criteria one at a time to validate each addition, or enable all remaining criteria in a single pass.
